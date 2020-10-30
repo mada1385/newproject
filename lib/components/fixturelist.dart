@@ -21,26 +21,21 @@ class _FixturelistState extends State<Fixturelist> {
       flex: 5,
       child: Container(
         width: double.infinity,
-        decoration: BoxDecoration(
-          // color: Color(0xFF4373D9),
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(40.0),
-            topRight: Radius.circular(40.0),
-          ),
-        ),
+        // decoration: BoxDecoration(
+        //   color: Color(0xFF4373D9),
+        //   borderRadius: BorderRadius.only(
+        //     topLeft: Radius.circular(40.0),
+        //     topRight: Radius.circular(40.0),
+        //   ),
+        // ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(
-              "MATCHES",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 24.0,
-              ),
-            ),
             Expanded(
               child: ListView.builder(
+                physics: const BouncingScrollPhysics(
+                    parent: AlwaysScrollableScrollPhysics()),
                 itemCount: widget.allmatches.length,
                 itemBuilder: (context, index) {
                   return GestureDetector(
@@ -49,7 +44,7 @@ class _FixturelistState extends State<Fixturelist> {
                           matchindex = index;
                         });
                       },
-                      child: matchTile(widget.allmatches[index], () {}));
+                      child: matchTile(widget.allmatches[index], context));
                 },
               ),
             )
