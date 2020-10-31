@@ -118,13 +118,18 @@ class Lineup {
   List lineupaway;
   List subshome;
   List subsaway;
+  String formationhome;
+  String formationaway;
 
-  Lineup(this.lineuphome, this.lineupaway, this.subshome, this.subsaway);
+  Lineup(this.lineuphome, this.lineupaway, this.subshome, this.subsaway,
+      this.formationhome, this.formationaway);
   factory Lineup.fromJson(Map<String, dynamic> json) {
     return Lineup(
         json["lineup"]["home"]["starting_lineups"],
         json["lineup"]["away"]["starting_lineups"],
         json["lineup"]["home"]["substitutes"],
-        json["lineup"]["away"]["substitutes"]);
+        json["lineup"]["away"]["substitutes"],
+        json["match_hometeam_system"],
+        json["match_awayteam_system"]);
   }
 }

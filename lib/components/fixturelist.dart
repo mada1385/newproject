@@ -18,7 +18,6 @@ class _FixturelistState extends State<Fixturelist> {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      flex: 5,
       child: Container(
         width: double.infinity,
         // decoration: BoxDecoration(

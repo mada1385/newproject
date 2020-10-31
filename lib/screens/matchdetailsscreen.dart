@@ -17,8 +17,17 @@ class MatchDetailsScreen extends StatefulWidget {
 }
 
 class _MatchDetailsScreenState extends State<MatchDetailsScreen> {
+  int tapindex = 0;
   @override
   Widget build(BuildContext context) {
+    List<Widget> detailscreen = [
+      Statsscreen(
+        match: widget.match,
+      ),
+      Lineupscreen(
+        match: widget.match,
+      ),
+    ];
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -92,14 +101,22 @@ class _MatchDetailsScreenState extends State<MatchDetailsScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       FlatButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          setState(() {
+                            tapindex = 0;
+                          });
+                        },
                         child: Text(
                           "stats",
                           style: TextStyle(color: textcolor, fontSize: 20),
                         ),
                       ),
                       FlatButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          setState(() {
+                            tapindex = 1;
+                          });
+                        },
                         child: Text(
                           "lineup",
                           style: TextStyle(color: textcolor, fontSize: 20),
@@ -113,12 +130,7 @@ class _MatchDetailsScreenState extends State<MatchDetailsScreen> {
             Expanded(
               child: Padding(
                 padding: EdgeInsets.only(right: 20, left: 20, top: 20),
-                child: Card(
-                  elevation: 20,
-                  child: Lineupscreen(
-                    match: widget.match,
-                  ),
-                ),
+                child: Card(elevation: 20, child: detailscreen[tapindex]),
               ),
             )
           ],

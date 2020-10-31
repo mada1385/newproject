@@ -16,62 +16,11 @@ class Statsscreen extends StatelessWidget {
       children: [
         Expanded(
           child: Container(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Statrow(
-                  match: match,
-                  index: 0,
-                ),
-                Statrow(
-                  match: match,
-                  index: 1,
-                ),
-                Statrow(
-                  match: match,
-                  index: 2,
-                ),
-                Statrow(
-                  match: match,
-                  index: 3,
-                ),
-                Statrow(
-                  match: match,
-                  index: 4,
-                ),
-                Statrow(
-                  match: match,
-                  index: 5,
-                ),
-                Statrow(
-                  match: match,
-                  index: 6,
-                ),
-                Statrow(
-                  match: match,
-                  index: 7,
-                ),
-                Statrow(
-                  match: match,
-                  index: 8,
-                ),
-                Statrow(
-                  match: match,
-                  index: 9,
-                ),
-                Statrow(
-                  match: match,
-                  index: 10,
-                ),
-                Statrow(
-                  match: match,
-                  index: 11,
-                ),
-                Statrow(
-                  match: match,
-                  index: 12,
-                ),
-              ],
+            child: ListView.builder(
+              itemBuilder: (context, index) {
+                return Statrow(match: match, index: index);
+              },
+              itemCount: match.stats.stats.length,
             ),
           ),
         ),

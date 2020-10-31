@@ -30,7 +30,7 @@ Widget matchTile(SoccerMatch match, BuildContext context) {
           child: Column(
             children: [
               Text(
-                "premiere leauge",
+                match.fixture.status.league,
               ),
               SizedBox(
                 height: SizeConfig.blockSizeVertical * 2,
