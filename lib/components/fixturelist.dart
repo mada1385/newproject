@@ -14,7 +14,6 @@ class Fixturelist extends StatefulWidget {
 
 class _FixturelistState extends State<Fixturelist> {
   int matchindex = 0;
-
   @override
   Widget build(BuildContext context) {
     return Expanded(

@@ -11,6 +11,15 @@ Widget matchTile(SoccerMatch match, BuildContext context) {
   if (homeGoal == null) homeGoal = "0";
   if (awayGoal == null) awayGoal = "0";
 
+  Widget checkUrl(String url) {
+    try {
+      return Image.network(url, width: 36.0, fit: BoxFit.cover);
+    } catch (e) {
+      print(e);
+      return Icon(Icons.image);
+    }
+  }
+
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 5),
     child: Card(
@@ -49,10 +58,7 @@ Widget matchTile(SoccerMatch match, BuildContext context) {
                       ),
                     ),
                   ),
-                  Image.network(
-                    match.home.logoUrl,
-                    width: 36.0,
-                  ),
+                  checkUrl(match.home.logoUrl),
                   Expanded(
                     child: Text(
                       "${homeGoal} - ${awayGoal}",
@@ -64,10 +70,7 @@ Widget matchTile(SoccerMatch match, BuildContext context) {
                       ),
                     ),
                   ),
-                  Image.network(
-                    match.away.logoUrl,
-                    width: 36.0,
-                  ),
+                  checkUrl(match.away.logoUrl),
                   Expanded(
                     child: Text(
                       match.away.name,

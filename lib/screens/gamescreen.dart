@@ -8,6 +8,7 @@ import 'package:gulf_football/screens/leaugefixturescreen.dart';
 import 'package:gulf_football/screens/standingsscreen.dart';
 import 'package:gulf_football/services/footballapi.dart';
 import 'package:gulf_football/services/standingsAPI.dart';
+import 'package:intl/intl.dart';
 
 class Gamescreen extends StatefulWidget {
   @override
@@ -15,10 +16,9 @@ class Gamescreen extends StatefulWidget {
 }
 
 class _GamescreenState extends State<Gamescreen> {
-  int leaguetab = 0;
-  int curentTab = 0;
   int selectedIndex = 0;
-  int leaugeidtab = 0;
+  int leaugeidtab = 2;
+
   List<String> league = [
     "★  favourits",
     "all games",
@@ -27,7 +27,7 @@ class _GamescreenState extends State<Gamescreen> {
     "Serie A",
     "La Liga"
   ];
-
+  DateFormat formatter = DateFormat('yyyy-MM-dd');
   DateTime startDate = DateTime.now().subtract(Duration(days: 1000));
   DateTime endDate = DateTime.now().add(Duration(days: 1000));
   DateTime selectedDate = DateTime.now().subtract(Duration(days: 0));
@@ -43,7 +43,9 @@ class _GamescreenState extends State<Gamescreen> {
   }
 
   onSelect(data) {
-    selectedDate = data;
+    setState(() {
+      selectedDate = data;
+    });
   }
 
   onWeekSelect(data) {
@@ -112,11 +114,12 @@ class _GamescreenState extends State<Gamescreen> {
   @override
   Widget build(BuildContext context) {
     List<String> leagueid = [null, null, "148", "195", "262", "468"];
-
-    List<Widget> leaugedetails = [
+    List<Widget> mainscreen = [
       FutureBuilder(
         future: SoccerApi().getAllMatches(
-            leagueid[leaugeidtab]), //Here we will call our getData() method,
+            null,
+            formatter.format(
+                selectedDate)), //Here we will call our getData() method,
         builder: (context, snapshot) {
           //the future builder is very intersting to use when you work with api
           if (snapshot.hasData) {
@@ -131,211 +134,103 @@ class _GamescreenState extends State<Gamescreen> {
           }
         }, // here we will buil the app layout
       ),
-      // FutureBuilder(
-      //   future: StandiingAPI(leagueid[leaugeidtab])
-      //       .getTable(), //Here we will call our getData() method,
-      //   builder: (context, snapshot) {
-      //     //the future builder is very intersting to use when you work with api
-      //     if (snapshot.hasData) {
-      //       print((snapshot.data).length);
-      //       return Standingscreen(
-      //         data: snapshot.data,
-      //       );
-      //     } else {
-      //       return Center(
-      //         child: CircularProgressIndicator(),
-      //       );
-      //     }
-      //   }, // here we will buil the app layout
-      // ),
+      Leaguesfixturescreen(
+        leaugeidtab: leagueid[leaugeidtab],
+        selecteddate: formatter.format(selectedDate),
+      )
     ];
+
     SizeConfig().init(context);
     return Scaffold(
       body: SafeArea(
         child: Container(
           color: Color(0xffF7F8FA),
-          child: Column(
-            children: [
-              Container(
-                  decoration: BoxDecoration(boxShadow: <BoxShadow>[
-                    BoxShadow(
-                        color: Colors.black12,
-                        blurRadius: 15.0,
-                        offset: Offset(0.0, .75))
-                  ], color: Colors.white),
-                  height: SizeConfig.safeBlockVertical * 14,
-                  child: Padding(
-                    padding: EdgeInsets.all(2),
-                    child: CalendarStrip(
-                      startDate: startDate,
-                      endDate: endDate,
-                      selectedDate: selectedDate,
-                      onDateSelected: onSelect,
-                      onWeekSelected: onWeekSelect,
-                      dateTileBuilder: dateTileBuilder,
-                      iconColor: Colors.black,
-                      monthNameWidget: _monthNameWidget,
-                      // markedDates: markedDates,
-                      containerDecoration: BoxDecoration(color: Colors.white),
-                      addSwipeGesture: true,
-                    ),
-                  )),
-              SizedBox(
-                height: 2,
-              ),
-              Container(
-                color: Color(0xffFCFCFC),
-
-                height: SizeConfig.blockSizeVertical * 6,
-                //color: Theme.of(context).primaryColor,
-                child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: league.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            // if (index == 0 || index == 1) {
-                            //   leaugeidtab = 2;
-                            // } else
-                            leaugeidtab = index;
-                            selectedIndex = index;
-                          });
-                        },
-                        child: Padding(
-                          padding: EdgeInsets.all(4.0),
-                          child: Container(
-                            width: 110,
-                            // padding: EdgeInsets.all(8.0),
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
-                              color: selectedIndex == index
-                                  ? Colors.green
-                                  : Color(0xFFFFFFFF),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Center(
-                              child: Padding(
-                                padding: const EdgeInsets.all(3),
-                                child: Text(
-                                  league[index],
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize:
-                                        SizeConfig.blockSizeVertical * 1.9,
-                                    fontWeight: FontWeight.w500,
-                                    color: selectedIndex == index
-                                        ? Colors.white
-                                        : Color(0xFFB4C1C4),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
-                    }),
-              ),
-              Expanded(
-                child: Container(
-                  child: Column(
-                    children: [
-                      Container(
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: SizeConfig.blockSizeHorizontal * 1),
-                          child: Column(
-                            children: <Widget>[
-                              Container(
-                                color: Color(0xffFCFCFC),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Expanded(
-                                      child: FlatButton(
-                                          onPressed: () {
-                                            setState(() {
-                                              leaguetab = 0;
-                                            });
-                                          },
-                                          child: Column(
-                                            children: [
-                                              Text(
-                                                "fixture",
-                                                style: TextStyle(
-                                                  fontSize: 25,
-                                                  color: leaguetab == 0
-                                                      ? Colors.green
-                                                      : Colors.grey,
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                height: 10,
-                                              ),
-                                              Container(
-                                                color: leaguetab == 0
-                                                    ? Colors.green
-                                                    : Colors.transparent,
-                                                height: 4,
-                                              )
-                                            ],
-                                          )),
-                                    ),
-                                    SizedBox(
-                                      height: SizeConfig.blockSizeVertical * 4,
-                                      child: Container(
-                                        width: 1,
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: FlatButton(
-                                          onPressed: () {
-                                            setState(() {
-                                              leaguetab = 1;
-                                            });
-                                          },
-                                          child: Column(
-                                            children: [
-                                              Text(
-                                                "standings",
-                                                style: TextStyle(
-                                                  fontSize: 25,
-                                                  color: leaguetab == 1
-                                                      ? Colors.green
-                                                      : Colors.grey,
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                height: 10,
-                                              ),
-                                              Container(
-                                                color: leaguetab == 1
-                                                    ? Colors.green
-                                                    : Colors.transparent,
-                                                height: 4,
-                                              )
-                                            ],
-                                          )),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        // Standingscreen(),
-
-                        // TeamList(idLeague),
-                      ),
-                      leaugedetails[leaguetab],
-                    ],
+          child: Column(children: [
+            Container(
+                decoration: BoxDecoration(boxShadow: <BoxShadow>[
+                  BoxShadow(
+                      color: Colors.black12,
+                      blurRadius: 15.0,
+                      offset: Offset(0.0, .75))
+                ], color: Colors.white),
+                height: SizeConfig.safeBlockVertical * 14,
+                child: Padding(
+                  padding: EdgeInsets.all(2),
+                  child: CalendarStrip(
+                    startDate: startDate,
+                    endDate: endDate,
+                    selectedDate: selectedDate,
+                    onDateSelected: onSelect,
+                    onWeekSelected: onWeekSelect,
+                    dateTileBuilder: dateTileBuilder,
+                    iconColor: Colors.black,
+                    monthNameWidget: _monthNameWidget,
+                    // markedDates: markedDates,
+                    containerDecoration: BoxDecoration(color: Colors.white),
+                    addSwipeGesture: true,
                   ),
-                ),
-              )
-            ],
-          ),
+                )),
+            SizedBox(
+              height: 2,
+            ),
+            Container(
+              color: Color(0xffFCFCFC),
+
+              height: SizeConfig.blockSizeVertical * 6,
+              //color: Theme.of(context).primaryColor,
+              child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: league.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          // if (index == 0 || index == 1) {
+                          //   leaugeidtab = 2;
+                          // } else
+                          leaugeidtab = index;
+                          selectedIndex = index;
+                        });
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.all(4.0),
+                        child: Container(
+                          width: 110,
+                          // padding: EdgeInsets.all(8.0),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            color: selectedIndex == index
+                                ? Colors.green
+                                : Color(0xFFFFFFFF),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Center(
+                            child: Padding(
+                              padding: const EdgeInsets.all(3),
+                              child: Text(
+                                league[index],
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: SizeConfig.blockSizeVertical * 1.9,
+                                  fontWeight: FontWeight.w500,
+                                  color: selectedIndex == index
+                                      ? Colors.white
+                                      : Color(0xFFB4C1C4),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  }),
+            ),
+            mainscreen[selectedIndex == 0
+                ? 0
+                : selectedIndex == 1
+                    ? 0
+                    : 1],
+          ]),
         ),
       ),
     );

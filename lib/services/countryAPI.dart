@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-import 'package:gulf_football/models/match.dart';
+import 'package:gulf_football/models/country.dart';
 import 'package:http/http.dart';
 
-class SoccerApi {
+class CountryApi {
   // final String apiUrl =
   //In our tutorial we will only see how to get the live matches
   //make sure to read the api documentation to be ables too understand it
@@ -16,12 +16,10 @@ class SoccerApi {
   //but before this we need to create our model
 
   //Now we finished with our Model
-  Future<List<SoccerMatch>> getAllMatches(String leaugeid, String date) async {
-    print(date);
-    String id = "&league_id=$leaugeid";
+  Future<List<Country>> getAllCountries() async {
     try {
       Response res = await get(
-          "https://apiv2.apifootball.com/?action=get_events&from=$date&to=$date${leaugeid == null ? null : id}&APIkey=290ec875c73e45bba490754b61ba1c1dabf300d2d30d5dd81bb25eab35f59a16");
+          "https://apiv2.apifootball.com/?action=get_countries&APIkey=290ec875c73e45bba490754b61ba1c1dabf300d2d30d5dd81bb25eab35f59a16");
       print(res.statusCode);
       var body;
 
@@ -31,10 +29,10 @@ class SoccerApi {
         if (res.body.length > 1) {
           List<dynamic> matchesList = body;
           print("Api service: ${body}"); // to debug
-          List<SoccerMatch> matches = matchesList
-              .map((dynamic item) => SoccerMatch.fromJson(item))
+          List<Country> countries = matchesList
+              .map((dynamic item) => Country.fromJson(item))
               .toList();
-          return matches;
+          return countries;
         } else {
           return null;
         }
