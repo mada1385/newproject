@@ -109,7 +109,7 @@ class _LineupscreenState extends State<Lineupscreen> {
                                   "${buttonindex == 0 ? widget.match.lineup.lineuphome[index]["lineup_number"] : widget.match.lineup.lineupaway[index]["lineup_number"]} - ",
                                   style: TextStyle(
                                       color: textcolor2,
-                                      fontSize: 25,
+                                      fontSize: 20,
                                       fontWeight: FontWeight.w600),
                                 ),
                               ),
