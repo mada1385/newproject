@@ -4,7 +4,7 @@ import 'package:gulf_football/models/country.dart';
 import 'package:gulf_football/screens/Leaguelistscreen.dart';
 
 class Countrylist extends StatelessWidget {
-  const Countrylist({
+  Countrylist({
     Key key,
     @required this.countries,
   }) : super(key: key);

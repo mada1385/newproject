@@ -1,18 +1,20 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:gulf_football/components/fixturelist.dart';
+import 'package:gulf_football/components/leaguefixturelist.dart';
 import 'package:gulf_football/config/mediaqueryconfig.dart';
 import 'package:gulf_football/models/match.dart';
 import 'package:gulf_football/screens/standingsscreen.dart';
 import 'package:gulf_football/services/footballapi.dart';
 import 'package:gulf_football/services/standingsAPI.dart';
+import 'package:intl/intl.dart';
 
 class Leaguesfixturescreen extends StatefulWidget {
-  final SoccerMatch match;
   final String leaugeidtab;
   final String selecteddate;
 
-  const Leaguesfixturescreen(
-      {Key key, this.match, this.leaugeidtab, this.selecteddate})
+  const Leaguesfixturescreen({Key key, this.leaugeidtab, this.selecteddate})
       : super(key: key);
   @override
   _LeaguesfixturescreenState createState() => _LeaguesfixturescreenState();
@@ -24,40 +26,9 @@ class _LeaguesfixturescreenState extends State<Leaguesfixturescreen> {
   @override
   Widget build(BuildContext context) {
     List<Widget> leaugedetails = [
-      FutureBuilder(
-        future: SoccerApi().getAllMatches(widget.leaugeidtab,
-            widget.selecteddate), //Here we will call our getData() method,
-        builder: (context, snapshot) {
-          //the future builder is very intersting to use when you work with api
-          if (snapshot.hasData) {
-            print((snapshot.data).length);
-            return Fixturelist(
-              allmatches: snapshot.data,
-            );
-          } else {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        }, // here we will buil the app layout
-      ),
-      FutureBuilder(
-        future: StandiingAPI(widget.leaugeidtab)
-            .getTable(), //Here we will call our getData() method,
-        builder: (context, snapshot) {
-          //the future builder is very intersting to use when you work with api
-          if (snapshot.hasData) {
-            print((snapshot.data).length);
-            return Standingscreen(
-              data: snapshot.data,
-            );
-          } else {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        }, // here we will buil the app layout
-      ),
+      Leaguefixturelist(
+          leagueid: widget.leaugeidtab, selecteddate: widget.selecteddate),
+      Standingscreen(leagueid: widget.leaugeidtab),
     ];
     return Expanded(
       child: Container(
@@ -84,7 +55,7 @@ class _LeaguesfixturescreenState extends State<Leaguesfixturescreen> {
                                 child: Column(
                                   children: [
                                     Text(
-                                      "fixture",
+                                      "المباريات",
                                       style: TextStyle(
                                         fontSize: 25,
                                         color: leaguetab == 0
@@ -121,7 +92,7 @@ class _LeaguesfixturescreenState extends State<Leaguesfixturescreen> {
                                 child: Column(
                                   children: [
                                     Text(
-                                      "standings",
+                                      "جدول الترتيب",
                                       style: TextStyle(
                                         fontSize: 25,
                                         color: leaguetab == 1

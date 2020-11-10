@@ -1,28 +1,29 @@
+// import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gulf_football/components/customtextfield.dart';
 import 'package:gulf_football/components/texts.dart';
 import 'package:gulf_football/config/colors.dart';
 import 'package:gulf_football/config/mediaqueryconfig.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:gulf_football/models/user.dart';
-import 'package:gulf_football/screens/countrylistscreen.dart';
-import 'package:gulf_football/screens/signinscreen.dart';
+import 'package:gulf_football/screens/forgetpasswordscreen.dart';
+import 'package:gulf_football/screens/homescreen.dart';
+import 'package:gulf_football/screens/signupscreen.dart';
 import 'package:gulf_football/services/authAPI.dart';
 
-class Signupscreen extends StatefulWidget {
+class Signinscreen extends StatefulWidget {
   @override
-  _SignupscreenState createState() => _SignupscreenState();
+  _SigninscreenState createState() => _SigninscreenState();
 }
 
-class _SignupscreenState extends State<Signupscreen> {
+class _SigninscreenState extends State<Signinscreen> {
   final mailcontroller = TextEditingController(),
-      usernamecontroller = TextEditingController(),
-      confirmpasswordcontroller = TextEditingController(),
       passwordcontroller = TextEditingController();
-  bool isobsecurepass = true, isobsecureCpass = true;
 
   final _formKey = GlobalKey<FormState>();
-  String password;
+  bool isobsecurepass = true;
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -54,7 +55,7 @@ class _SignupscreenState extends State<Signupscreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Boldaccectcolor(text: "لنبدأ"),
+                          Boldaccectcolor(text: "لنكمل ما بدأناه"),
                         ],
                       ),
                     ),
@@ -67,7 +68,7 @@ class _SignupscreenState extends State<Signupscreen> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Contenttext(
-                            data: "سجل حساب للمتابعة",
+                            data: "سجل حسابك للمتابعة",
                             size: 20,
                           ),
                         ],
@@ -92,26 +93,14 @@ class _SignupscreenState extends State<Signupscreen> {
                           horizontal: 20, vertical: 5),
                       child: CustomTextfield(
                           controller: mailcontroller,
-                          hint: "اكنب بريدك",
+                          hint: "اكتب بريدك",
                           isobscure: false,
                           label: "بريدك",
                           priffix: Icons.mail_outline,
                           validator: 1),
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 5),
-                      child: CustomTextfield(
-                          controller: usernamecontroller,
-                          hint: "اكتب اسم المستخدم",
-                          isobscure: false,
-                          label: "اسم المستخدم",
-                          priffix: Icons.person_outline,
-                          validator: 0),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 5),
+                      padding: const EdgeInsets.all(20),
                       child: CustomTextfield(
                         suffix: GestureDetector(
                           onTap: () {
@@ -134,65 +123,31 @@ class _SignupscreenState extends State<Signupscreen> {
                       ),
                     ),
                     Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 5),
-                        child: TextFormField(
-                          onChanged: (val) => password = val,
-                          controller: confirmpasswordcontroller,
-                          obscureText: isobsecureCpass,
-                          decoration: new InputDecoration(
-                              suffix: GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    isobsecureCpass = !isobsecureCpass;
-                                  });
-                                },
-                                child: Icon(
-                                  Icons.remove_red_eye,
-                                  color: accentcolor,
-                                  size: 20,
-                                ),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                  borderSide:
-                                      new BorderSide(color: accentcolor)),
-                              border: new OutlineInputBorder(
-                                  borderSide:
-                                      new BorderSide(color: accentcolor)),
-                              hintText: "اعد كتابة كلمة السر",
-                              labelText: "تأكيد كلمة السر",
-                              labelStyle: TextStyle(color: textcolor),
-                              prefixIcon: Icon(
-                                Icons.lock_outline,
-                                color: Colors.green,
-                              ),
-                              prefixText: ' ',
-                              // suffix: ,
-                              suffixStyle:
-                                  const TextStyle(color: Colors.green)),
-                          validator: (val) => MatchValidator(
-                                  errorText: 'passwords do not match')
-                              .validateMatch(confirmpasswordcontroller.text,
-                                  passwordcontroller.text),
-                        )),
-                    Padding(
-                      padding:
-                          const EdgeInsets.only(left: 20, right: 20, top: 15),
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Container(
+                        width: double.infinity,
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Icon(
-                              Icons.check_circle_outline,
-                              color: accentcolor,
-                            ),
-                            Container(
-                              width: 20,
-                            ),
-                            Text(
-                                "بتسجيل حساب انت توافق على على الشروط والاحكام"),
+                            Contenttext(data: "نسيت كلمة السر ؟  ", size: 15),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            Forgetpasswordscreen()));
+                              },
+                              child: Text(
+                                "اضغط هنا",
+                                style: TextStyle(
+                                    color: accentcolor,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            )
                           ],
                         ),
-                        width: double.infinity,
                       ),
                     ),
                     Padding(
@@ -208,25 +163,26 @@ class _SignupscreenState extends State<Signupscreen> {
                               // otherwise.
                               if (_formKey.currentState.validate()) {
                                 print(mailcontroller.toString());
-                                User user = User(mailcontroller.text,
-                                    passwordcontroller.text,
-                                    username: usernamecontroller.text);
-                                Authapi x = Authapi();
-                                var signup = await x.register(user);
 
+                                User user = User(
+                                  mailcontroller.text,
+                                  passwordcontroller.text,
+                                );
+                                Authapi x = Authapi();
+                                var signup = await x.login(user);
+                                print(signup["msg"]);
                                 if (signup["success"]) {
                                   Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) =>
-                                              Countrylistscreen()));
+                                          builder: (context) => Homescreen()));
                                 } else {
                                   print(signup["msg"]);
                                 }
                               }
                             },
                             child: Text(
-                              'تسجيل حساب',
+                              'تسجيل دخول',
                               style: TextStyle(color: Colors.white),
                             ),
                           ),
@@ -238,16 +194,16 @@ class _SignupscreenState extends State<Signupscreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Contenttext(data: "لديك حساب بالفعل ؟  ", size: 15),
+                          Contenttext(data: "لا تملك حساب ؟  ", size: 15),
                           GestureDetector(
                             onTap: () {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => Signinscreen()));
+                                      builder: (context) => Signupscreen()));
                             },
                             child: Text(
-                              "سجل دخول",
+                              "انشأ حساب",
                               style: TextStyle(
                                   color: accentcolor,
                                   fontSize: 15,
@@ -264,7 +220,7 @@ class _SignupscreenState extends State<Signupscreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "او انشأ حساب بواسطة",
+                          "او سجل دخول بواسطة : ",
                           style: TextStyle(
                               color: textcolor,
                               fontSize: 20,
@@ -297,9 +253,6 @@ class _SignupscreenState extends State<Signupscreen> {
                         )
                       ],
                     ),
-                    SizedBox(
-                      height: 20,
-                    )
                   ],
                 ),
               )

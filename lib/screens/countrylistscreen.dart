@@ -12,15 +12,27 @@ class Countrylistscreen extends StatefulWidget {
 }
 
 class _CountrylistscreenState extends State<Countrylistscreen> {
-  // List<Country> countries = [
-  //   Country("egypt", "id"),
-  //   Country("egypt", "id"),
-  //   Country("egypt", "id"),
-  //   Country("egypt", "id"),
-  //   Country("egypt", "id"),
-  //   Country("egypt", "id"),
-  //   Country("egypt", "id"),
-  // ];
+  TextEditingController controller = new TextEditingController();
+  List<Country> onSearchTextChanged(String text, List<Country> fav) {
+    List<Country> _searchResult = [];
+    _searchResult.clear();
+    if (text.isEmpty) {
+      // setState(() {});
+      return null;
+    }
+
+    fav.forEach((userDetail) {
+      if (userDetail.country.toUpperCase().contains(text.toUpperCase()) ||
+          userDetail.country.toUpperCase().contains(text.toUpperCase()))
+        _searchResult.add(userDetail);
+    });
+
+    // setState(() {});
+    return _searchResult;
+  }
+
+  bool searchstate = false;
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -32,34 +44,89 @@ class _CountrylistscreenState extends State<Countrylistscreen> {
             children: [
               Container(
                 width: double.infinity,
-                height: SizeConfig.blockSizeVertical * 25,
+                height: searchstate == false
+                    ? SizeConfig.blockSizeVertical * 20
+                    : SizeConfig.blockSizeVertical * 30,
                 child: Column(
                   children: [
+                    Container(
+                      height: searchstate == false
+                          ? SizeConfig.blockSizeVertical * 0
+                          : SizeConfig.blockSizeVertical * 10,
+                      color: Color(0xffF2FBF9),
+                      child: searchstate == false
+                          ? null
+                          : new Padding(
+                              padding: EdgeInsets.all(
+                                  SizeConfig.blockSizeVertical * 1),
+                              child: new Card(
+                                child: new ListTile(
+                                  leading: Icon(Icons.search,
+                                      size: SizeConfig.blockSizeVertical * 3),
+                                  title: new TextField(
+                                    controller: controller,
+                                    decoration: new InputDecoration(
+                                        hintText: 'Search',
+                                        border: InputBorder.none),
+                                  ),
+                                  // trailing: new IconButton(
+                                  //   icon: new Icon(
+                                  //     Icons.cancel,
+                                  //     size: searchstate == false ? 0 : 25,
+                                  //   ),
+                                  //   onPressed: () {
+                                  //     controller.clear();
+                                  //   },
+                                  // ),
+                                ),
+                              ),
+                            ),
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(left: 20, top: 20),
+                          padding: EdgeInsets.only(
+                              right: SizeConfig.blockSizeVertical * 2.5,
+                              top: SizeConfig.blockSizeVertical * 2.5),
                           child: Boldaccectcolor(
-                            text: "Choose your country",
+                            text: "اختر دولتك المفضلة",
                           ),
                         ),
                         Padding(
-                            padding: const EdgeInsets.only(left: 20, top: 20),
+                            padding: EdgeInsets.only(
+                                left: SizeConfig.blockSizeVertical * 2.5,
+                                top: SizeConfig.blockSizeVertical * 2.5),
                             child: IconButton(
-                              icon: Icon(Icons.search),
-                              onPressed: () {},
+                              icon: Icon(
+                                searchstate == false
+                                    ? Icons.search
+                                    : Icons.close,
+                                size: SizeConfig.blockSizeVertical * 4,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  searchstate = !searchstate;
+                                  controller.clear();
+                                });
+                              },
                               color: accentcolor,
-                              iconSize: 30,
+                              iconSize: SizeConfig.blockSizeVertical * 4,
                             ))
                       ],
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 20),
-                      child: Contenttext(
-                        data: "select your country",
-                        size: 15,
+                      padding: EdgeInsets.symmetric(
+                          horizontal: SizeConfig.blockSizeVertical * 2.5,
+                          vertical: SizeConfig.blockSizeVertical * 1),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Contenttext(
+                            data: "select your country",
+                            size: SizeConfig.blockSizeVertical * 2.5,
+                          ),
+                        ],
                       ),
                     ),
                   ],
@@ -81,18 +148,23 @@ class _CountrylistscreenState extends State<Countrylistscreen> {
                 future: CountryApi()
                     .getAllCountries(), //Here we will call our getData() method,
                 builder: (context, snapshot) {
-                  //the future builder is very intersting to use when you work with api
                   if (snapshot.hasData) {
-                    print((snapshot.data).length);
-                    return Countrylist(
-                      countries: snapshot.data,
-                    );
+                    if (onSearchTextChanged(controller.text, snapshot.data) ==
+                        null)
+                      return Countrylist(
+                        countries: snapshot.data,
+                      );
+                    else
+                      return Countrylist(
+                        countries:
+                            onSearchTextChanged(controller.text, snapshot.data),
+                      );
                   } else {
                     return Center(
                       child: CircularProgressIndicator(),
                     );
                   }
-                }, // here we will buil the app layout
+                },
               ),
             ],
           ),

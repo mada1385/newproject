@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_image/network.dart';
 import 'package:gulf_football/config/colors.dart';
 import 'package:gulf_football/config/mediaqueryconfig.dart';
 import 'package:gulf_football/models/news.dart';
@@ -10,6 +11,7 @@ class TrendNewscard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return Container(
         height: SizeConfig.blockSizeVertical * 30,
         width: double.infinity,
@@ -28,12 +30,16 @@ class TrendNewscard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(8.0),
-                  topRight: Radius.circular(8.0)),
-              child: Image.network(news.image,
-                  fit: BoxFit.fill, height: 150, width: double.infinity),
-            ),
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(8.0),
+                    topRight: Radius.circular(8.0)),
+                child: Image(
+                    image: new NetworkImageWithRetry(
+                      news.image,
+                    ),
+                    fit: BoxFit.fill,
+                    height: SizeConfig.blockSizeVertical * 15,
+                    width: double.infinity)),
             SizedBox(
               height: 10,
             ),

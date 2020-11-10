@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_image/network.dart';
 import 'package:gulf_football/config/mediaqueryconfig.dart';
 import 'package:gulf_football/models/match.dart';
 import 'package:gulf_football/screens/matchdetailsscreen.dart';
@@ -10,15 +11,6 @@ Widget matchTile(SoccerMatch match, BuildContext context) {
 
   if (homeGoal == null) homeGoal = "0";
   if (awayGoal == null) awayGoal = "0";
-
-  Widget checkUrl(String url) {
-    try {
-      return Image.network(url, width: 36.0, fit: BoxFit.cover);
-    } catch (e) {
-      print(e);
-      return Icon(Icons.image);
-    }
-  }
 
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 5),
@@ -58,7 +50,12 @@ Widget matchTile(SoccerMatch match, BuildContext context) {
                       ),
                     ),
                   ),
-                  checkUrl(match.home.logoUrl),
+                  Image(
+                      image: new NetworkImageWithRetry(
+                        match.home.logoUrl,
+                      ),
+                      width: 36.0,
+                      fit: BoxFit.cover),
                   Expanded(
                     child: Text(
                       "${homeGoal} - ${awayGoal}",
@@ -70,7 +67,12 @@ Widget matchTile(SoccerMatch match, BuildContext context) {
                       ),
                     ),
                   ),
-                  checkUrl(match.away.logoUrl),
+                  Image(
+                      image: new NetworkImageWithRetry(
+                        match.away.logoUrl,
+                      ),
+                      width: 36.0,
+                      fit: BoxFit.cover),
                   Expanded(
                     child: Text(
                       match.away.name,

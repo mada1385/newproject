@@ -107,7 +107,7 @@ class _MatchDetailsScreenState extends State<MatchDetailsScreen> {
                           });
                         },
                         child: Text(
-                          "stats",
+                          "الاحصائيات",
                           style: TextStyle(color: textcolor, fontSize: 20),
                         ),
                       ),
@@ -118,7 +118,7 @@ class _MatchDetailsScreenState extends State<MatchDetailsScreen> {
                           });
                         },
                         child: Text(
-                          "lineup",
+                          "التشكيل",
                           style: TextStyle(color: textcolor, fontSize: 20),
                         ),
                       )

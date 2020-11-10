@@ -18,16 +18,17 @@ class SoccerApi {
   //Now we finished with our Model
   Future<List<SoccerMatch>> getAllMatches(String leaugeid, String date) async {
     print(date);
+    print(leaugeid);
     String id = "&league_id=$leaugeid";
     try {
       Response res = await get(
           "https://apiv2.apifootball.com/?action=get_events&from=$date&to=$date${leaugeid == null ? null : id}&APIkey=290ec875c73e45bba490754b61ba1c1dabf300d2d30d5dd81bb25eab35f59a16");
       print(res.statusCode);
-      var body;
+      var body = jsonDecode(res.body);
 
       if (res.statusCode == 200) {
         // this mean that we are connected to the data base
-        body = jsonDecode(res.body);
+
         if (res.body.length > 1) {
           List<dynamic> matchesList = body;
           print("Api service: ${body}"); // to debug

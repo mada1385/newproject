@@ -3,6 +3,7 @@ import 'package:gulf_football/components/texts.dart';
 import 'package:gulf_football/models/Leagues.dart';
 import 'package:gulf_football/models/country.dart';
 import 'package:gulf_football/models/teams.dart';
+import 'package:gulf_football/screens/homescreen.dart';
 
 class Teamslist extends StatelessWidget {
   final List<Teams> teams;
@@ -27,6 +28,10 @@ class Teamslist extends StatelessWidget {
                     offset: Offset(0, .75))
               ]),
               child: ListTile(
+                onTap: () {
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) => Homescreen()));
+                },
                 leading: Image.network(teams[index].teambadge),
                 title: Contenttext(
                   data: teams[index].teamname,

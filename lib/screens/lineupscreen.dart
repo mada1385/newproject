@@ -76,7 +76,7 @@ class _LineupscreenState extends State<Lineupscreen> {
         ),
         Center(
           child: Text(
-            "formation : ${buttonindex == 0 ? widget.match.lineup.formationhome : widget.match.lineup.formationaway}",
+            "التشكيل : ${buttonindex == 0 ? widget.match.lineup.formationhome : widget.match.lineup.formationaway}",
             style: TextStyle(
                 color: textcolor2, fontSize: 25, fontWeight: FontWeight.w600),
           ),

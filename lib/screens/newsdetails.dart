@@ -1,12 +1,14 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:gulf_football/components/latestnewslist.dart';
 import 'package:gulf_football/components/newscard.dart';
 import 'package:gulf_football/components/texts.dart';
 import 'package:gulf_football/config/colors.dart';
 import 'package:gulf_football/models/news.dart';
+import 'package:gulf_football/services/newsAPI.dart';
 
 class Newsdetails extends StatelessWidget {
-  final News news;
+  final news;
   List<News> listofnews = [
     News(
         "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy",
@@ -59,30 +61,23 @@ class Newsdetails extends StatelessWidget {
                 text: "Related news",
               ),
             ),
-            CarouselSlider(
-              options: CarouselOptions(
-                scrollDirection: Axis.vertical,
-                height: 230,
-              ),
-              items: listofnews.map((i) {
-                return Builder(
-                  builder: (BuildContext context) {
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => Newsdetails(
-                                      news: i,
-                                    )));
-                      },
-                      child: Newscard(
-                        news: i,
-                      ),
-                    );
-                  },
-                );
-              }).toList(),
+            FutureBuilder(
+              future: NewsAPI().getAllnews(),
+              builder: (context, snapshots) {
+                //the future builder is very intersting to use when you work with api
+                if (snapshots.hasData) {
+                  print((snapshots.data).length);
+                  return Latestnewslist(news: snapshots.data);
+                } else {
+                  return Center(
+                      child: Theme(
+                    data: Theme.of(context).copyWith(accentColor: accentcolor),
+                    child: new CircularProgressIndicator(
+                      backgroundColor: Colors.black26,
+                    ),
+                  ));
+                }
+              },
             ),
           ],
         ),

@@ -12,7 +12,7 @@ class Leagues {
   factory Leagues.fromJson(Map<String, dynamic> json) {
     return Leagues(
       json["league_name"],
-      json["country_id"],
+      json["league_id"],
     );
   }
 }

@@ -1,11 +1,17 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:gulf_football/components/profileoptioncard.dart';
+import 'package:gulf_football/components/signinchecker.dart';
 import 'package:gulf_football/components/texts.dart';
 import 'package:gulf_football/config/colors.dart';
+import 'package:gulf_football/config/provider.dart';
+import 'package:gulf_football/screens/contactusscreen.dart';
 import 'package:gulf_football/screens/profilescreen.dart';
+import 'package:gulf_football/screens/signinscreen.dart';
+import 'package:gulf_football/services/authAPI.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
+import 'package:share/share.dart';
 
 class Profileoptions extends StatefulWidget {
   @override
@@ -23,6 +29,14 @@ class _ProfileoptionsState extends State<Profileoptions> {
       _image = image;
       print('Image Path $_image');
     });
+  }
+
+  share(BuildContext context, String link) {
+    final RenderBox box = context.findRenderObject();
+
+    Share.share(link,
+        subject: "check my folio",
+        sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size);
   }
 
   @override
@@ -49,26 +63,40 @@ class _ProfileoptionsState extends State<Profileoptions> {
                         onTap: () async {
                           await getImage();
                         },
-                        child: Column(
-                          children: [
-                            CircleAvatar(
-                                maxRadius: 50,
-                                backgroundImage: _image != null
-                                    ? FileImage(_image)
-                                    : AssetImage(
-                                        "asset/nopic.jpg",
-                                      )),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Boldaccectcolor(
-                              text: "user name ",
-                            ),
-                            SizedBox(
-                              height: 30,
-                            ),
-                          ],
-                        ),
+                        child: Provider.of<Userprovider>(context).token == null
+                            ? Signinchecher()
+                            : Column(
+                                children: [
+                                  Align(
+                                    child: IconButton(
+                                      icon: Icon(
+                                        Icons.logout,
+                                        color: accentcolor,
+                                      ),
+                                      onPressed: () async {
+                                        await Authapi().logout(context);
+                                      },
+                                    ),
+                                    alignment: Alignment.topRight,
+                                  ),
+                                  CircleAvatar(
+                                      maxRadius: 50,
+                                      backgroundImage: _image != null
+                                          ? FileImage(_image)
+                                          : AssetImage(
+                                              "asset/nopic.jpg",
+                                            )),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Boldaccectcolor(
+                                    text: "user name ",
+                                  ),
+                                  SizedBox(
+                                    height: 30,
+                                  ),
+                                ],
+                              ),
                       ),
                     ],
                   ),
@@ -91,33 +119,37 @@ class _ProfileoptionsState extends State<Profileoptions> {
                         activeTrackColor: accentcolor,
                         activeColor: accentcolor,
                       ),
-                      title: "contact us",
+                      title: "دفع الاشعارات",
+                    ),
+                    Profileoptioncard(
+                      // icon: Icon(Icons.person),
+                      title: "عن الشركة",
                     ),
                     Profileoptioncard(
                       ontap: () {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => Profilescreen()));
+                                builder: (context) => Contactusscreen()));
                       },
-                      // icon: Icon(Icons.person),
-                      title: "company profile",
-                    ),
-                    Profileoptioncard(
                       // icon: Icon(Icons.payment),
-                      title: "contact us",
+                      title: "اتصل بنا",
                     ),
                     Profileoptioncard(
                       // icon: Icon(Icons.call),
-                      title: "terms of service",
+                      title: "شروط الخدمة",
                     ),
                     Profileoptioncard(
                       // icon: Icon(Icons.payment),
-                      title: "privacy policy",
+                      title: "سياسة الخصوصية",
                     ),
                     Profileoptioncard(
                       // icon: Icon(Icons.payment),
-                      title: "share gulf goal",
+                      title: "شارك التطبيق",
+
+                      ontap: () async {
+                        share(context, "share my app");
+                      },
                     ),
                   ],
                 ),

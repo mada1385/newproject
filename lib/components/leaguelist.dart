@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gulf_football/components/texts.dart';
 import 'package:gulf_football/models/Leagues.dart';
-import 'package:gulf_football/models/country.dart';
 import 'package:gulf_football/screens/teamslistscreen.dart';
 
 class Leaguelist extends StatelessWidget {
@@ -28,6 +27,7 @@ class Leaguelist extends StatelessWidget {
               ]),
               child: GestureDetector(
                 onTap: () {
+                  print("***************************${leagues[index].id}");
                   Navigator.push(
                       context,
                       MaterialPageRoute(
