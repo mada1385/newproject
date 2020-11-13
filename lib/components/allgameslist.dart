@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:gulf_football/components/fixturelist.dart';
+import 'package:gulf_football/config/colors.dart';
 import 'package:gulf_football/services/footballapi.dart';
 import 'package:intl/intl.dart';
 
@@ -60,8 +61,12 @@ class _AllgameslistState extends State<Allgameslist> {
           );
         } else {
           return Center(
-            child: CircularProgressIndicator(),
-          );
+              child: Theme(
+            data: Theme.of(context).copyWith(accentColor: accentcolor),
+            child: new CircularProgressIndicator(
+              backgroundColor: Colors.black26,
+            ),
+          ));
         }
       }, // here we will buil the app layout
     );

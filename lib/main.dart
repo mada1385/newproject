@@ -12,6 +12,7 @@ import 'package:gulf_football/screens/nointernetscreen.dart';
 import 'package:gulf_football/screens/profileoptions.dart';
 import 'package:gulf_football/screens/signinscreen.dart';
 import 'package:gulf_football/screens/signupscreen.dart';
+import 'package:gulf_football/screens/teamslistscreen.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -36,7 +37,7 @@ void main() async {
         theme: ThemeData(
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: Homescreen(),
+        home: Signinscreen(),
       ),
     ),
   ));
